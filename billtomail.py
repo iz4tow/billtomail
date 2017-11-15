@@ -13,7 +13,18 @@ fromaddr = "f.avino@melchioni.it"
 user = "f.avino@melchionispa"
 password = "Fiwoldiois01"
 
-data=time.strftime('%Y%m%d')#data di oggi
+oggi=time.strftime('%Y%m%d')#data di oggi
+arrivo=oggi
+partenza=oggi
+
+jar = 'C:\IBM\jdbcmysql.jar' # location of the jdbc driver jar
+args='-Djava.class.path=%s' % jar
+jvm = jpype.getDefaultJVMPath()
+jpype.startJVM(jvm, args)
+con1=jaydebeapi.connect('com.mysql.jdbc.Driver', 'jdbc:mysql://localhost:3306/billtomail',['billtomail','billtomail']) #connessione al db2
+cursm=con1.cursor()
+cursm.execute("SELECT * FROM date")
+#cursm.fetchall()
 
 jar = 'C:\IBM\db2jcc4.jar' # location of the jdbc driver jar
 args='-Djava.class.path=%s' % jar
@@ -24,6 +35,8 @@ conn=jaydebeapi.connect('com.ibm.db2.jcc.DB2Driver', 'jdbc:db2://10.1.12.71:5000
 
 curs=conn.cursor()
 
+#query="SELECT * FROM DIGI.TABUTE_FG003 WHERE data_fattura>='"+partenza+"' AND data_fattura<'"+arrivo+"'"
+#curs.execute("SELECT * FROM TABUTE_FG003 WHERE data_fattura>=''")
 curs.execute("SELECT DG_INDIRIZZO_EMAIL,FATT_MAIL FROM DIGI.AZ_FRANCO WHERE MK_TIPO_CONTROPART='CLIENT' AND MK_UNITA_ORGANIZ='CNTFOR' AND FATT_MAIL!='0'")
 rows = curs.fetchall()
 for row in rows:
