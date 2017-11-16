@@ -13,31 +13,58 @@ fromaddr = "f.avino@melchioni.it"
 user = "f.avino@melchionispa"
 password = "Fiwoldiois01"
 
-oggi=time.strftime('%Y%m%d')#data di oggi
+oggi=time.strftime('%Y-%m-%d')#data di oggi
 arrivo=oggi
 partenza=oggi
-
+##############################################CONNESSIONE DBs#############################################################################
+#CONNESSIONE A MYSQL
 jar = 'C:\IBM\jdbcmysql.jar' # location of the jdbc driver jar
 args='-Djava.class.path=%s' % jar
 jvm = jpype.getDefaultJVMPath()
 jpype.startJVM(jvm, args)
 con1=jaydebeapi.connect('com.mysql.jdbc.Driver', 'jdbc:mysql://localhost:3306/billtomail',['billtomail','billtomail']) #connessione al db2
 cursm=con1.cursor()
-cursm.execute("SELECT * FROM date")
-#cursm.fetchall()
+########FINE MYSQL
+
+#CONNESSIONE A DB2
+jar = 'C:\IBM\db2jcc4.jar' # location of the jdbc driver jar
+args='-Djava.class.path=%s' % jar
+jvm = jpype.getDefaultJVMPath()
+jpype.startJVM(jvm, args)
+conn=jaydebeapi.connect('com.ibm.db2.jcc.DB2Driver', 'jdbc:db2://10.1.12.71:50000/s71mk0pu',['db2inst1','db2inst1']) #connessione al db2
+curs=conn.cursor()
+#########FINE DB2
+
+
+#NB: 	curs=cursore DB2 su conn Db2
+#		cursm=cursore mysql su con1 mysql
+#########################################################FINE CONNESSIONI A DBs############################################################
+
+
+
+#SOSTITUTO DEL FILE BANDIERA, FARE PAGINA WEB PER MODIFICHE
+cursm.execute("SELECT * FROM bandiera")
+datas=cursm.fetchall()
+data=data[0] #seleziono riga 0
+inizio=data[0] #seleziono i campi
+fine=data[1] #seleziono i campi
+forzata=data[2] #seleziono i campi
+###############################################################FINE BANDIERA
+
+cursm.execute("TRUNCATE TABLE bandiera") #da inserire alla fine????
+
 
 jar = 'C:\IBM\db2jcc4.jar' # location of the jdbc driver jar
 args='-Djava.class.path=%s' % jar
 jvm = jpype.getDefaultJVMPath()
 jpype.startJVM(jvm, args)
-
 conn=jaydebeapi.connect('com.ibm.db2.jcc.DB2Driver', 'jdbc:db2://10.1.12.71:50000/s71mk0pu',['db2inst1','db2inst1']) #connessione al db2
-
 curs=conn.cursor()
 
 #query="SELECT * FROM DIGI.TABUTE_FG003 WHERE data_fattura>='"+partenza+"' AND data_fattura<'"+arrivo+"'"
 #curs.execute("SELECT * FROM TABUTE_FG003 WHERE data_fattura>=''")
-curs.execute("SELECT DG_INDIRIZZO_EMAIL,FATT_MAIL FROM DIGI.AZ_FRANCO WHERE MK_TIPO_CONTROPART='CLIENT' AND MK_UNITA_ORGANIZ='CNTFOR' AND FATT_MAIL!='0'")
+query="SELECT * FROM DIGI.TABUTE_FG0003 LEFT OUTER JOIN DIGI.AZ_FRANCO ON (DIGI.TABUTE_FG0003.MK_CLIENTE = DIGI.AZ_FRANCO.MK_CONTROPARTE) WHERE DIGI.AZ_FRANCO.DG_INDIRIZZO_EMAIL IS NOT NULL AND DIGI.AZ_FRANCO.FATT_MAIL!='0' AND DIGI.TABUTE_FG0003.MK_DATAFA>='2002-01-30' and DIGI.TABUTE_FG0003.MK_DATAFA<'2017-10-31'"
+curs.execute(query)
 rows = curs.fetchall()
 for row in rows:
 	print(row) #SELEZIONO LA RIGA COME ARRAY
