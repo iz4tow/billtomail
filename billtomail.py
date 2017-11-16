@@ -15,7 +15,8 @@ password = "Fiwoldiois01"
 
 oggi=time.strftime('%Y-%m-%d')#data di oggi
 arrivo=oggi
-partenza=oggi
+##########################################################################################################################################
+##########################################################################################################################################
 ##############################################CONNESSIONE DBs#############################################################################
 #CONNESSIONE A MYSQL
 jar = 'C:\IBM\jdbcmysql.jar' # location of the jdbc driver jar
@@ -38,7 +39,9 @@ curs=conn.cursor()
 
 #NB: 	curs=cursore DB2 su conn Db2
 #		cursm=cursore mysql su con1 mysql
-#########################################################FINE CONNESSIONI A DBs############################################################
+#########################################################FINE CONNESSIONI A DBs###########################################################
+##########################################################################################################################################
+##########################################################################################################################################
 
 
 
@@ -46,20 +49,21 @@ curs=conn.cursor()
 cursm.execute("SELECT * FROM bandiera")
 datas=cursm.fetchall()
 data=data[0] #seleziono riga 0
-inizio=data[0] #seleziono i campi
-fine=data[1] #seleziono i campi
+inizio_bandiera=data[0] #seleziono i campi
+fine_bandiera=data[1] #seleziono i campi
 forzata=data[2] #seleziono i campi
 ###############################################################FINE BANDIERA
 
+inizio=inizio_bandiera#LA DATA DI INIZIO è COMUNQUE DETTATA DALLA BANDIERA, FORZATA O MENO
+if forzata!=0:
+	fine=fine_bandiera
+	print ("!!!!!!!!!!!!!!!!!!!!!!!!!DATA FORZATA DA UTENTE!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+	
+print ("DATA INIZIO: " + inizio + "\n")
+print ("DATA FINE: " + fine + "\n")
+
 cursm.execute("TRUNCATE TABLE bandiera") #da inserire alla fine????
 
-
-jar = 'C:\IBM\db2jcc4.jar' # location of the jdbc driver jar
-args='-Djava.class.path=%s' % jar
-jvm = jpype.getDefaultJVMPath()
-jpype.startJVM(jvm, args)
-conn=jaydebeapi.connect('com.ibm.db2.jcc.DB2Driver', 'jdbc:db2://10.1.12.71:50000/s71mk0pu',['db2inst1','db2inst1']) #connessione al db2
-curs=conn.cursor()
 
 #query="SELECT * FROM DIGI.TABUTE_FG003 WHERE data_fattura>='"+partenza+"' AND data_fattura<'"+arrivo+"'"
 #curs.execute("SELECT * FROM TABUTE_FG003 WHERE data_fattura>=''")
