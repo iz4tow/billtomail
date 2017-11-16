@@ -1,0 +1,1 @@
+C:\Users\f.avino\AppData\Local\Programs\Python\Python36\Scripts\pyinstaller.exe --hidden-import jaydebeapi,pyodbc,jpype,time,smtplib,email -F billtomail-sybaseiq.py
