@@ -27,13 +27,21 @@ for riga in file:
 		impostazione,valore=riga.split("|"); #PRENDE IMPOSTAZIONE E VALORE IMPOSTAZIONE USANDO COME SEPARATORE I :
 		if impostazione=='mail':
 			fromaddr=valore
+			fromaddr=fromaddr.replace("\n","")
 		if impostazione=='mailuser':
 			user=valore
+			user=user.replace("\n","")
 		if impostazione=='mailpassword':
 			password=valore
+			password=password.replace("\n","")
 		if impostazione=='origine_fatture':
 			percorso=valore
+			percorso=percorso.replace("\n","")
+		if impostazione=='contatto_interno':
+			contatto_interno=valore
+			contatto_interno=contatto_interno.replace("\n","")
 ##############################################FINE FILE INI IMPOSAZIONI###################################################################
+
 
 ##########################################################################################################################################
 ##########################################################################################################################################
@@ -66,6 +74,7 @@ inizio_bandiera=data[1] #seleziono i campi
 fine_bandiera=data[2] #seleziono i campi
 forzata=data[3] #seleziono i campi
 esecuzione=data[4] #seleziono i campi
+errore=data[5] #seleziono i campi
 ###############################################################FINE BANDIERA
 cursm.execute("UPDATE bandiera SET esecuzione='1' WHERE id='"+idbandiera+"'")
 
@@ -80,11 +89,16 @@ if esecuzione!=0:
 	print ("!!!!!!!!!!!!!!!!!!!!!!!!!REINIZIO DA DOVE MI ERO INTERROTTO SALTANDO L'IMPORTAZIONE!!!!!!!!!!!!!!!!!!!!!!!!!")
 	print ("!!!!!!!!!!!!!!!!!!!!!!!!!DATA FORZATA DA ERRORE PRECEDENTE ESECUZIONE!!!!!!!!!!!!!!!!!!!!!!!!!\n")
 	fine=fine_bandiera
+	
+if errore!=0:
+	print ("!!!!!!!!!!!!!!!!!!!!!!!!!NON TUTTE LE FATTURE DELLA FATTURAZIONE PRECEDENTE SONO STATE INVIATE!!!!!!!!!!!!!!!!!!!!!!!!!")
+	print ("!!!!!!!!!!!!!!!!!!!!!!!!!DATA FORZATA DA ERRORE PRECEDENTE ESECUZIONE!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+	fine=fine_bandiera
 
 print ("DATA INIZIO: " + inizio + "\n")
 print ("DATA FINE: " + fine + "\n")
 	
-if esecuzione==0: #SOLO SE L'esecuzione precedente è terminata correttamente reimporto i dati da sybase iq altrimenti torno sulla tabella degli invii a completare l'opera
+if esecuzione==0 and errore==0: #SOLO SE L'esecuzione precedente è terminata correttamente reimporto i dati da sybase iq altrimenti torno sulla tabella degli invii a completare l'opera
 	#SELEZIONO LE FATTURE DA INVIARE SU SYBASE IQ
 	sql = "SELECT distinct substr(dba.artfatt3.f_cliente,1,8) as f_cliente, dba.artfatt3.cli_invio_doc, dba.artfatt3.numero_fattura, dba.artfatt3.data_fattura, dba.clienti_email.E_mail FROM dba.artfatt3 LEFT OUTER JOIN dba.clienti_email ON (dba.artfatt3.cli_invio_doc = dba.clienti_email.Codice_cliente) WHERE dba.clienti_email.E_mail is not null and dba.artfatt3.data_fattura>='"+inizio+"' and dba.artfatt3.data_fattura<'"+fine+"'"
 	cursiq.execute(sql)
@@ -103,11 +117,16 @@ if esecuzione==0: #SOLO SE L'esecuzione precedente è terminata correttamente re
 	cursiq.close()#SYBASE IQ NON SERVE ORA
 	print("IMPORTAZIONE RECORD DA SYBASE IQ TERMINATA")
 
+#MODIFICA A BANDIERA PER MONITORAGGIO ESECUZIONE SOLO SE NON e' UNA RIPRESA
+if esecuzione==0:
+	cursm.execute("SELECT COUNT(*) FROM invio")
+	tot_mail=str(cursm.fetchone()[0])#CONTO LE RIGHE
+	cursm.execute("UPDATE bandiera SET fine='"+fine+"',tot_mail='"+tot_mail+"' WHERE id='"+idbandiera+"'")#MI SALVO TOT MAIL E FINE PER UN EVENTUALE RIGIRO
+##########FINE MODIFICA BANDIERA
 
-	
 #RILEGGO LA TABELLA DI COMODO PER COMINCIARE GLI INVII....
 cursm.execute("SELECT * FROM invio")
-fatture = cursm.fetchall()
+fatture = cursm.fetchall()#fetch della select dentro la matrice fatture
 for fattura in fatture:
 	idinvio=str(fattura[0])
 	numfattura=fattura[1]
@@ -130,6 +149,7 @@ for fattura in fatture:
 	msg.attach(MIMEText(body, 'plain'))
 	
 	filename = percorso+anno+"\\"+documento
+
 	errore=0
 	try:
 		attachment = open(filename, "rb")
@@ -171,4 +191,18 @@ print ("TOTALE: "+contatore)
 if counterror=='0': #SE NON CI SONO STATI ERRORI
 	cursm.execute("TRUNCATE TABLE invio")#svuoto la tabella degli invii su mysql
 	cursm.execute("TRUNCATE TABLE bandiera") #svuoto la bandiera
-	cursm.execute("INSERT INTO bandiera (inizio,fine,forzata,esecuzione) VALUES ('"+fine+"','0','0','0')")#CREO LA NUOVA BANDIERA CON DATA INIZIO= FINE DI OGGI e FORZATA=0 ed esecuzione a 0
+	cursm.execute("INSERT INTO bandiera (inizio,fine,forzata,esecuzione,errore,tot_mail) VALUES ('"+fine+"','0','0','0','0','0')")#CREO LA NUOVA BANDIERA CON DATA INIZIO= FINE DI OGGI e FORZATA=0 ed esecuzione a 0
+else:
+	cursm.execute("UPDATE bandiera SET errore='1',esecuzione='0' WHERE id='"+idbandiera+"'") #METTO L'ERRORE NELLA BANDIERA
+	err = MIMEMultipart()
+	err['From'] = fromaddr
+	err['To'] = contatto_interno
+	err['Subject'] = "ERRORI DURANTE INVIO FATTURE TELEMATICO"
+	corpo = "TOTALE MAIL INVIATE: "+countok+"\nTOTALE ERRORI: " +counterror+"\nTOTALE: "+contatore+"\n\n\n CONTROLLARE LOG SU SERVER"
+	err.attach(MIMEText(corpo, 'plain'))
+	server = smtplib.SMTP('owa.melchioni.it', 25)
+	server.starttls()
+	server.login(user, password)
+	error = err.as_string()
+	server.sendmail(fromaddr, contatto_interno, error)
+	server.quit()

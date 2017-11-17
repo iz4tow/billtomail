@@ -21,6 +21,10 @@ def bandiera(): #il parametro global prima delle variabili serve a passare alla 
 	global fine_bandiera
 	global forzata
 	global esecuzione
+	global errore
+	global tot_mail
+	global rimanenti
+	global rimanentistring
 	cursm.execute("SELECT * FROM bandiera")
 	datas=cursm.fetchall() 
 	data=datas[0] #seleziono riga 0
@@ -29,7 +33,39 @@ def bandiera(): #il parametro global prima delle variabili serve a passare alla 
 	fine_bandiera=data[2] #seleziono i campi
 	forzata=data[3] #seleziono i campi
 	esecuzione=data[4] #seleziono i campi
+	errore=data[6] #seleziono i campi
+	tot_mail=str(data[5]) #seleziono i campi
+	cursm.execute("SELECT COUNT(*) FROM invio")
+	rimanenti=cursm.fetchone()[0]#CONTO LE RIGHE
+	rimanentistring=str(rimanenti)
 ###############################################################FINE BANDIERA
+##############################################################################FUNZIONE REFRESH
+def ricarica():
+	bandiera()
+	app.setLabel("invii", "MANCANO "+rimanentistring+" INVII SU "+tot_mail) #NOMELABEL, CONTENUTO
+	app.setEntry("inizio",inizio_bandiera)#ricarico da DB
+	app.setEntry("fine",fine_bandiera)#ricarico da DB
+	if forzata!=0:
+		print ("FORZATA!!!")
+		app.setLabelFg("forzata", "red")#NOME LABEL, COLORE CARATTERE
+	else:
+		app.setLabelFg("forzata", "yellow")#NOME LABEL, COLORE CARATTERE
+	if esecuzione!=0:
+		print ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ESECUZIONE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		app.setLabelFg("esecuzione", "red")#NOME LABEL, COLORE CARATTERE
+		app.hideButton("Modifica") #NASCONDE IL TASTO
+	else:
+		app.setLabelFg("esecuzione", "yellow")
+		app.showButton("Modifica") #SVELA IL TASTO
+	if rimanenti!=0:
+		app.setLabelFg("invii", "green") #NOME LABEL, COLORE CARATTERE
+		if esecuzione==0:
+			app.setLabelFg("invii", "red") #NOME LABEL, COLORE CARATTERE
+	else:
+		app.setLabelFg("invii", "yellow") #NOME LABEL, COLORE CARATTERE
+###################################################################################################################FINE REFRESH
+
+
 bandiera()
 
 
@@ -38,21 +74,8 @@ bandiera()
 # handle button events
 def press(button):
 	if button == "Ricarica":
-		bandiera()
-		app.setEntry("inizio",inizio_bandiera)#ricarico da DB
-		app.setEntry("fine",fine_bandiera)#ricarico da DB
-		if forzata!=0:
-			print ("FORZATA!!!")
-			app.setLabelFg("forzata", "red")#NOME LABEL, COLORE CARATTERE
-		else:
-			app.setLabelFg("forzata", "yellow")#NOME LABEL, COLORE CARATTERE
-		if esecuzione!=0:
-			print ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ESECUZIONE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-			app.setLabelFg("esecuzione", "red")#NOME LABEL, COLORE CARATTERE
-			app.hideButton("Modifica") #NASCONDE IL TASTO
-		else:
-			app.setLabelFg("esecuzione", "yellow")
-			app.showButton("Modifica") #SVELA IL TASTO
+		ricarica()
+
 	if button == "Modifica":
 		inizio=app.getEntry("inizio")
 		fine=app.getEntry("fine")
@@ -62,12 +85,12 @@ def press(button):
 
 
 # create a GUI variable called app
-app = gui("BANDIERA BILLTOMAIL By Franco Avino", "400x200")
+app = gui("BANDIERA BILLTOMAIL By Franco Avino", "600x300")
 app.setBg("yellow")
 app.setFont(18)
 
 # add & configure widgets - widgets get a name, to help referencing them later
-app.addLabel("title", "Modifica bandiera BILLTOMAIL") #NOMELABEL, CONTENUTO
+app.addLabel("title", "\nModifica bandiera BILLTOMAIL\n") #NOMELABEL, CONTENUTO
 app.setLabelBg("title", "blue")#NOMELABEL, COLORE SFONDO
 app.setLabelFg("title", "red") #NOME LABEL, COLORE CARATTERE
 
@@ -80,6 +103,15 @@ app.setLabelFg("dataf", "black")#NOMELABEL, COLORE SFONDO
 app.addEntry("fine")
 app.setEntryDefault("inizio",inizio_bandiera)#l'aggiunta di Default permette di mettere un valore default alla label text
 app.setEntryDefault("fine",fine_bandiera)#l'aggiunta di Default permette di mettere un valore default alla label text
+
+app.addLabel("invii", "MANCANO "+rimanentistring+" INVII SU "+tot_mail) #NOMELABEL, CONTENUTO
+if rimanenti!=0:
+	app.setLabelFg("invii", "green") #NOME LABEL, COLORE CARATTERE
+	if esecuzione==0:
+		app.setLabelFg("invii", "red") #NOME LABEL, COLORE CARATTERE
+else:
+	app.setLabelFg("invii", "yellow") #NOME LABEL, COLORE CARATTERE
+
 
 
 app.addLabel("forzata","DATA FORZATA")#NOMELABEL, CONTENUTO
@@ -99,7 +131,8 @@ else:
 if esecuzione==0:
 	app.addButtons(["Modifica","Ricarica"], press)
 else:
-	app.addButtons(["Ricarica"], press)
+	app.addButtons(["Modifica","Ricarica"], press)
+	app.hideButton("Modifica") #NASCONDE IL TASTO
 
 
 # start the GUI

@@ -36,6 +36,8 @@ CREATE TABLE `bandiera` (
   `fine` varchar(10) NOT NULL,
   `forzata` int(1) NOT NULL,
   `esecuzione` int(1) NOT NULL
+  `tot_mail` int(5) NULL
+  `errore` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
