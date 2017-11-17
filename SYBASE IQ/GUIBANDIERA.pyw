@@ -79,8 +79,7 @@ def press(button):
 	if button == "Modifica":
 		inizio=app.getEntry("inizio")
 		fine=app.getEntry("fine")
-		cursm.execute("TRUNCATE TABLE BANDIERA") #FACCIAMO PULIZIA
-		cursm.execute("INSERT INTO BANDIERA (inizio,fine,forzata,esecuzione) VALUES ('"+inizio+"','"+fine+"','1','0')")
+		cursm.execute("UPDATE BANDIERA SET inizio="+inizio+",fine="+fine+",forzata='1' WHERE id='"+idbandiera+"'")
 		
 
 
