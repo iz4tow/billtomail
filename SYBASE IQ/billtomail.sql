@@ -130,6 +130,7 @@ ALTER TABLE `invio`
 
 
 GRANT ALL PRIVILEGES ON `billtomail` . * TO 'billtomail'@'localhost' IDENTIFIED BY 'billtomail';
+GRANT ALL PRIVILEGES ON `billtomail` . * TO 'billtomail'@'%' IDENTIFIED BY 'billtomail';
 FLUSH PRIVILEGES;
 
 
