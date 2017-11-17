@@ -12,12 +12,28 @@ from email import encoders
 counterror=0
 countok=0
 contatore=0
-fromaddr = "inviofatture@melchioni.it"
-user = "inviofatture@melchionispa"
-password = "invio123"
 
 oggi=time.strftime('%Y%m%d')#data di oggi
-fine=oggi
+fine=oggi #SALVO DIVERSA IMPOSTAZIONE NELLA BANDIERA LA FINE E' OGGI
+
+
+
+
+##############################################APERTURA FILE INI IMPOSAZIONI###############################################################
+file = open("setting.ini", "r") 
+for riga in file:
+	if riga.find("|")!=-1: #SOLO LE RIGHE DELLE IMPOSTAZIONI CHE CONTENGONO IL | VENGONO CONSIDERATE, GLI ALTRI SONO COMMENTI
+		riga=riga.replace(" ","") #TOGLO GLI SPAZI BIANCHI
+		impostazione,valore=riga.split("|"); #PRENDE IMPOSTAZIONE E VALORE IMPOSTAZIONE USANDO COME SEPARATORE I :
+		if impostazione=='mail':
+			fromaddr=valore
+		if impostazione=='mailuser':
+			user=valore
+		if impostazione=='mailpassword':
+			password=valore
+		if impostazione=='origine_fatture':
+			percorso=valore
+##############################################FINE FILE INI IMPOSAZIONI###################################################################
 
 ##########################################################################################################################################
 ##########################################################################################################################################
@@ -69,22 +85,22 @@ print ("DATA INIZIO: " + inizio + "\n")
 print ("DATA FINE: " + fine + "\n")
 	
 if esecuzione==0: #SOLO SE L'esecuzione precedente è terminata correttamente reimporto i dati da sybase iq altrimenti torno sulla tabella degli invii a completare l'opera
-	##SELEZIONO LE FATTURE DA INVIARE SU SYBASE IQ
-	#sql = "SELECT distinct substr(dba.artfatt3.f_cliente,1,8) as f_cliente, dba.artfatt3.cli_invio_doc, dba.artfatt3.numero_fattura, dba.artfatt3.data_fattura, dba.clienti_email.E_mail FROM dba.artfatt3 LEFT OUTER JOIN dba.clienti_email ON (dba.artfatt3.cli_invio_doc = dba.clienti_email.Codice_cliente) WHERE dba.clienti_email.E_mail is not null and dba.artfatt3.data_fattura>='"+inizio+"' and dba.artfatt3.data_fattura<'"+fine+"'"
-	#cursiq.execute(sql)
-	#fatture = cursiq.fetchall()
-	##MI SALVO I CAMPI ESTRATTI DA SYBASE IQ SU MYSQL DI COMODO
-	#for fattura in fatture:  
-	#	cliente=fattura[0]
-	#	cliente_invio=fattura[1]
-	#	numfatt=fattura[2]
-	#	datafatt=fattura[3]
-	#	mail=fattura[4]
-	#	datafatt=str(datafatt) #rendo il campo datetime una stringa
-	#	anno=datafatt[:4]#substring per ottenere l'anno  (caratteri 1 a 4)
-	#	#INSERISCO I DATI LETTI SU MYSQL NELLA TABELLA DI COMODO INVIO
-	#	cursm.execute("INSERT INTO invio (fattura,data,anno,cod_cliente,cod_cliente_invio,mail) VALUES ('"+numfatt+"','"+datafatt+"','"+anno+"','"+cliente+"','"+cliente_invio+"','"+mail+"')")
-	#cursiq.close()#SYBASE IQ NON SERVE ORA
+	#SELEZIONO LE FATTURE DA INVIARE SU SYBASE IQ
+	sql = "SELECT distinct substr(dba.artfatt3.f_cliente,1,8) as f_cliente, dba.artfatt3.cli_invio_doc, dba.artfatt3.numero_fattura, dba.artfatt3.data_fattura, dba.clienti_email.E_mail FROM dba.artfatt3 LEFT OUTER JOIN dba.clienti_email ON (dba.artfatt3.cli_invio_doc = dba.clienti_email.Codice_cliente) WHERE dba.clienti_email.E_mail is not null and dba.artfatt3.data_fattura>='"+inizio+"' and dba.artfatt3.data_fattura<'"+fine+"'"
+	cursiq.execute(sql)
+	fatture = cursiq.fetchall()
+	#MI SALVO I CAMPI ESTRATTI DA SYBASE IQ SU MYSQL DI COMODO
+	for fattura in fatture:  
+		cliente=fattura[0]
+		cliente_invio=fattura[1]
+		numfatt=fattura[2]
+		datafatt=fattura[3]
+		mail=fattura[4]
+		datafatt=str(datafatt) #rendo il campo datetime una stringa
+		anno=datafatt[:4]#substring per ottenere l'anno  (caratteri 1 a 4)
+		#INSERISCO I DATI LETTI SU MYSQL NELLA TABELLA DI COMODO INVIO
+		cursm.execute("INSERT INTO invio (fattura,data,anno,cod_cliente,cod_cliente_invio,mail) VALUES ('"+numfatt+"','"+datafatt+"','"+anno+"','"+cliente+"','"+cliente_invio+"','"+mail+"')")
+	cursiq.close()#SYBASE IQ NON SERVE ORA
 	print("IMPORTAZIONE RECORD DA SYBASE IQ TERMINATA")
 
 
@@ -113,7 +129,7 @@ for fattura in fatture:
 	
 	msg.attach(MIMEText(body, 'plain'))
 	
-	filename = "S:\\PDFATTURE\\"+anno+"\\"+documento
+	filename = percorso+anno+"\\"+documento
 	errore=0
 	try:
 		attachment = open(filename, "rb")
