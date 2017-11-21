@@ -63,6 +63,12 @@ def ricarica():
 			app.setLabelFg("invii", "red") #NOME LABEL, COLORE CARATTERE
 	else:
 		app.setLabelFg("invii", "yellow") #NOME LABEL, COLORE CARATTERE
+	if errore!=0:
+		app.setLabelFg("errore", "red") #NOME LABEL, COLORE CARATTERE
+		app.showButton("Rimuovi Errore") #SVELA IL TASTO
+	else:
+		app.setLabelFg("errore", "yellow") #NOME LABEL, COLORE CARATTERE
+		app.hideButton("Rimuovi Errore") #NASCONDE IL TASTO
 ###################################################################################################################FINE REFRESH
 
 
@@ -80,6 +86,10 @@ def press(button):
 		inizio=app.getEntry("inizio")
 		fine=app.getEntry("fine")
 		cursm.execute("UPDATE BANDIERA SET inizio="+inizio+",fine="+fine+",forzata='1' WHERE id='"+idbandiera+"'")
+	
+	if button == "Rimuovi Errore":
+		cursm.execute("UPDATE BANDIERA SET errore='0' WHERE id='"+idbandiera+"'")
+		ricarica()
 		
 
 
@@ -125,14 +135,19 @@ if esecuzione!=0:
 else:
 	app.setLabelFg("esecuzione", "yellow")#NOME LABEL, COLORE CARATTERE
 
-
-
-if esecuzione==0:
-	app.addButtons(["Modifica","Ricarica"], press)
+	
+app.addLabel("errore","BILLTOMAIL TERMINATO IN ERRORE")#NOMELABEL, CONTENUTO
+if errore!=0:
+	app.setLabelFg("errore", "red")#NOME LABEL, COLORE CARATTERE
 else:
-	app.addButtons(["Modifica","Ricarica"], press)
-	app.hideButton("Modifica") #NASCONDE IL TASTO
+	app.setLabelFg("errore", "yellow")#NOME LABEL, COLORE CARATTERE
+	
 
+app.addButtons(["Modifica","Ricarica","Rimuovi Errore"], press)
+if esecuzione!=0:
+	app.hideButton("Modifica") #NASCONDE IL TASTO
+if errore==0:
+	app.hideButton("Rimuovi Errore")
 
 # start the GUI
 app.go()
