@@ -88,7 +88,7 @@ def press(button):
 		cursm.execute("UPDATE BANDIERA SET inizio="+inizio+",fine="+fine+",forzata='1' WHERE id='"+idbandiera+"'")
 	
 	if button == "Rimuovi Errore":
-		cursm.execute("UPDATE BANDIERA SET errore='0' WHERE id='"+idbandiera+"'")
+		cursm.execute("UPDATE BANDIERA SET errore='0',inizio="+fine+",fine='0',forzata='1' WHERE id='"+idbandiera+"'")
 		ricarica()
 		
 
