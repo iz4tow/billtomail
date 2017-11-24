@@ -126,7 +126,7 @@ def press(button):
 			#app.setLabel("avviso1","RECORD DUPLICATO, FORSE VUOI MODIFICARLO?")
 			app.setLabelFg("avviso1", "red")#NOMELABEL, COLORE SFONDO
 		else:
-			curs.execute("INSERT INTO DIGI.TABUTE_AZMAIL (DG_C_SOC,DG_C_DIVS,DG_C_VERS,MK_DIVISIONE,MK_TIPO_CONTROPART,MK_CONTROPARTE,MK_UNITA_ORGANIZ,MK_PROGR_2,DG_INDIRIZZO_EMAIL,FATT_MAIL) VALUES ('0100','00','00','00','CLIENT','"+codcli+"','CNTFOR','1','"+email+"','1')")
+			curs.execute("INSERT INTO DIGI.TABUTE_AZMAIL (DG_C_SOC,DG_C_DIVS,DG_C_VERS,MK_DIVISIONE,MK_TIPO_CONTROPART,MK_CONTROPARTE,MK_UNITA_ORGANIZ,MK_PROGR_2,DG_INDIRIZZO_EMAIL,MK_FATT_MAIL) VALUES ('0100','00','00','00','CLIENT','"+codcli+"','CNTFOR','1','"+email+"','1')")
 			curs.execute("commit")
 			#app.showLabel("avviso1") #nascondo avviso1 di comodo per avvisi
 			#app.setLabel("avviso1","RECORD INSERITO")
@@ -217,7 +217,7 @@ def press(button):
 			#app.setLabelFg("avviso1", "green")#NOMELABEL, COLORE SFONDO
 			#privacy()
 		else:
-			curs.execute("INSERT INTO DIGI.TABUTE_AZMAIL (DG_C_SOC,DG_C_DIVS,DG_C_VERS,MK_DIVISIONE,MK_TIPO_CONTROPART,MK_CONTROPARTE,MK_UNITA_ORGANIZ,MK_PROGR_2,DG_INDIRIZZO_EMAIL,FATT_MAIL) VALUES ('0100','00','00','00','CLIENT','"+codcli+"','CNTFOR','1','"+email+"','1')")
+			curs.execute("INSERT INTO DIGI.TABUTE_AZMAIL (DG_C_SOC,DG_C_DIVS,DG_C_VERS,MK_DIVISIONE,MK_TIPO_CONTROPART,MK_CONTROPARTE,MK_UNITA_ORGANIZ,MK_PROGR_2,DG_INDIRIZZO_EMAIL,MK_FATT_MAIL) VALUES ('0100','00','00','00','CLIENT','"+codcli+"','CNTFOR','1','"+email+"','1')")
 			curs.execute("commit")
 			#app.showLabel("avviso1") #nascondo avviso1 di comodo per avvisi
 			#app.setLabel("avviso1","RECORD INSERITO")

@@ -1,0 +1,42 @@
+missing module named resource - imported by posix, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named posix - imported by os, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named _posixsubprocess - imported by subprocess, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named 'org.python' - imported by pickle, xml.sax, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named readline - imported by cmd, code, pdb, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+excluded module named _frozen_importlib - imported by importlib, importlib.abc, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named _frozen_importlib_external - imported by importlib._bootstrap, importlib, importlib.abc, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named _winreg - imported by platform, jpype._windows, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named _scproxy - imported by urllib.request
+missing module named java - imported by platform, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named 'java.lang' - imported by platform, xml.sax._exceptions, jaydebeapi, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named vms_lib - imported by platform, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named termios - imported by tty, getpass, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named urllib.quote_plus - imported by urllib, appJar.appjar
+missing module named urllib.urlopen - imported by urllib, appJar.appjar
+missing module named urllib.urlencode - imported by urllib, appJar.appjar
+missing module named urllib.urlretrieve - imported by urllib, appJar.appjar
+missing module named grp - imported by shutil, tarfile, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named pwd - imported by posixpath, shutil, tarfile, http.server, webbrowser, netrc, getpass, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named _dummy_threading - imported by dummy_threading, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named org - imported by copy, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE SYBASE + DB2\FATTUREONLINE.py
+missing module named PyObjCTools - imported by jpype._gui
+missing module named jpype.isJVMStarted - imported by jpype, jpype._jpackage
+missing module named 'java.io' - imported by jaydebeapi
+missing module named 'java.net' - imported by jaydebeapi
+missing module named 'java.util' - imported by jaydebeapi
+missing module named jarray - imported by jaydebeapi
+missing module named 'java.sql' - imported by jaydebeapi
+missing module named 'idlelib.TreeWidget' - imported by appJar.appjar
+missing module named cpngfilters - imported by appJar.lib.png
+missing module named Queue - imported by appJar.appjar
+missing module named Tkdnd - imported by appJar.appjar
+missing module named 'matplotlib.figure' - imported by appJar.appjar
+missing module named matplotlib - imported by appJar.appjar
+missing module named ConfigParser - imported by appJar.appjar
+missing module named ttk - imported by appJar.appjar
+missing module named tkFont - imported by appJar.appjar
+missing module named ScrolledText - imported by appJar.appjar
+missing module named tkFileDialog - imported by appJar.appjar
+missing module named tkColorChooser - imported by appJar.appjar
+missing module named tkMessageBox - imported by appJar.appjar
+missing module named Tkinter - imported by appJar.appjar, appJar.lib.tooltip, appJar.lib.TkDND_wrapper, appJar.lib.tkinter_png
