@@ -88,12 +88,19 @@ def privacy():
 
 
 
-# handle button events
+############################################################################################################################
+################################################EVENTI BOTTONI##############################################################
+############################################################################################################################
+
 def press(button):
 	app.hideLabel("avviso1") #nascondo avviso1 di comodo per avvisi
+	
+###############################################################TASTO INSERISCI
 	if button == "Inserisci":
 		global email
 		codcli=app.getEntry("codicecliente")
+		
+		########################SYBASE IQ
 		cursiq.execute("SELECT e_mail FROM DBA.clienti_email where codice_cliente='"+codcli+"'")
 		esiste=len(cursiq.fetchall())#lunghezza array estratto, conto le righe insomma...
 		if esiste>0:
@@ -106,21 +113,38 @@ def press(button):
 			email=email.replace(" ","")
 			cursiq.execute("INSERT INTO DBA.clienti_email (codice_cliente,e_mail) VALUES ('"+codcli+"','"+email+"')")
 			cursiq.execute("commit")
-			curs.execute("INSERT INTO DIGI.TABUTE_AZMAIL (DG_C_SOC,DG_C_DIVS,DG_C_VERS,MK_DIVISIONE,MK_TIPO_CONTROPART,MK_CONTROPARTE,MK_UNITA_ORGANIZ,MK_PROGR_2,DG_INDIRIZZO_EMAIL,FATT_MAIL) VALUES ('0100','00','00','00','CLIENT','"+codcli+"','CNTFOR','1','"+email+"','1')")
-			curs.execute("commit")
 			app.showLabel("avviso1") #nascondo avviso1 di comodo per avvisi
 			app.setLabel("avviso1","RECORD INSERITO")
 			app.setLabelFg("avviso1", "green")#NOMELABEL, COLORE SFONDO
 			privacy()
+			
+		###########################DB2
+		curs.execute("SELECT DG_INDIRIZZO_EMAIL FROM DIGI.TABUTE_AZMAIL WHERE MK_CONTROPARTE='"+codcli+"'")
+		esisteibm=len(curs.fetchall())#lunghezza array estratto, conto le righe insomma...
+		if esisteibm>0:
+			#app.showLabel("avviso1")
+			#app.setLabel("avviso1","RECORD DUPLICATO, FORSE VUOI MODIFICARLO?")
+			app.setLabelFg("avviso1", "red")#NOMELABEL, COLORE SFONDO
+		else:
+			curs.execute("INSERT INTO DIGI.TABUTE_AZMAIL (DG_C_SOC,DG_C_DIVS,DG_C_VERS,MK_DIVISIONE,MK_TIPO_CONTROPART,MK_CONTROPARTE,MK_UNITA_ORGANIZ,MK_PROGR_2,DG_INDIRIZZO_EMAIL,FATT_MAIL) VALUES ('0100','00','00','00','CLIENT','"+codcli+"','CNTFOR','1','"+email+"','1')")
+			curs.execute("commit")
+			#app.showLabel("avviso1") #nascondo avviso1 di comodo per avvisi
+			#app.setLabel("avviso1","RECORD INSERITO")
+			#app.setLabelFg("avviso1", "green")#NOMELABEL, COLORE SFONDO
+			#privacy()
+			
+###############################################################FINE TASTO INSERISCI			
+			
+###############################################################TASTO RIMUOVI		
 	if button == "Rimuovi":
 		codcli=app.getEntry("codicecliente")
+		
+		########################SYBASE IQ
 		cursiq.execute("SELECT e_mail FROM DBA.clienti_email where codice_cliente='"+codcli+"'")
 		esiste=len(cursiq.fetchall())#lunghezza array estratto, conto le righe insomma...
 		if esiste>0:
 			cursiq.execute("DELETE DBA.clienti_email where codice_cliente='"+codcli+"'")
 			cursiq.execute("commit")
-			curs.execute("DELETE FROM DIGI.TABUTE_AZMAIL WHERE MK_CONTROPARTE='"+codcli+"'")
-			curs.execute("commit")
 			app.showLabel("avviso1")
 			app.setLabel("avviso1","RECORD CANCELLATO")
 			app.setLabelFg("avviso1", "red")#NOMELABEL, COLORE SFONDO
@@ -128,6 +152,24 @@ def press(button):
 			app.showLabel("avviso1")
 			app.setLabel("avviso1","CLIENTE INESISTENTE")
 			app.setLabelFg("avviso1", "red")#NOMELABEL, COLORE SFONDO
+		
+		########################DB2
+		curs.execute("SELECT DG_INDIRIZZO_EMAIL FROM DIGI.TABUTE_AZMAIL WHERE MK_CONTROPARTE='"+codcli+"'")
+		esisteibm=len(curs.fetchall())#lunghezza array estratto, conto le righe insomma...
+		if esisteibm>0:		
+			curs.execute("DELETE FROM DIGI.TABUTE_AZMAIL WHERE MK_CONTROPARTE='"+codcli+"'")
+			curs.execute("commit")
+			#app.showLabel("avviso1")
+			#app.setLabel("avviso1","RECORD CANCELLATO")
+			#app.setLabelFg("avviso1", "red")#NOMELABEL, COLORE SFONDO
+		else:
+			#app.showLabel("avviso1")
+			#app.setLabel("avviso1","CLIENTE INESISTENTE")
+			app.setLabelFg("avviso1", "red")#NOMELABEL, COLORE SFONDO
+###############################################################FINE TASTO RIMUOVI
+
+###############################################################TASTO RICERCA		
+			
 	if button == "Ricerca":
 		codcli=app.getEntry("codicecliente")
 		cursiq.execute("SELECT e_mail FROM DBA.clienti_email where codice_cliente='"+codcli+"'")
@@ -141,25 +183,51 @@ def press(button):
 			app.showLabel("avviso1")
 			app.setLabel("avviso1","CLIENTE INESISTENTE")
 			app.setLabelFg("avviso1", "red")#NOMELABEL, COLORE SFONDO
+###############################################################FINE TASTO RICERCA
+
+###############################################################TASTO MODIFICA
 
 	if button == "Modifica":
 		codcli=app.getEntry("codicecliente")
 		email=app.getEntry("email")
+		
+		########################SYBASE IQ
 		cursiq.execute("SELECT e_mail FROM DBA.clienti_email where codice_cliente='"+codcli+"'")
 		esiste=len(cursiq.fetchall())#lunghezza array estratto, conto le righe insomma...
 		if esiste>0:
 			cursiq.execute("UPDATE DBA.clienti_email SET e_mail='"+email+"'where codice_cliente='"+codcli+"'")
 			cursiq.execute("commit")
-			curs.execute("UPDATE DIGI.TABUTE_AZMAIL SET DG_INDIRIZZO_EMAIL='"+email+"' WHERE MK_CONTROPARTE='"+codcli+"'")
-			curs.execute("commit")
 			app.showLabel("avviso1")
 			app.setLabel("avviso1","RECORD MODIFICATO")
 			app.setLabelFg("avviso1", "green")#NOMELABEL, COLORE SFONDO
+			privacy()
 		else:
 			app.showLabel("avviso1")
 			app.setLabel("avviso1","CLIENTE INESISTENTE")
 			app.setLabelFg("avviso1", "red")#NOMELABEL, COLORE SFONDO
 
+		###########################DB2 ATTENZIONE CHE IN QUESTO CASO SE NON ESISTE LO INSERISCE!!!!
+		curs.execute("SELECT DG_INDIRIZZO_EMAIL FROM DIGI.TABUTE_AZMAIL WHERE MK_CONTROPARTE='"+codcli+"'")
+		esisteibm=len(curs.fetchall())#lunghezza array estratto, conto le righe insomma...
+		if esisteibm>0:
+			curs.execute("UPDATE DIGI.TABUTE_AZMAIL SET DG_INDIRIZZO_EMAIL='"+email+"' WHERE MK_CONTROPARTE='"+codcli+"'")
+			curs.execute("commit")
+			#app.showLabel("avviso1")
+			#app.setLabel("avviso1","RECORD MODIFICATO")
+			#app.setLabelFg("avviso1", "green")#NOMELABEL, COLORE SFONDO
+			#privacy()
+		else:
+			curs.execute("INSERT INTO DIGI.TABUTE_AZMAIL (DG_C_SOC,DG_C_DIVS,DG_C_VERS,MK_DIVISIONE,MK_TIPO_CONTROPART,MK_CONTROPARTE,MK_UNITA_ORGANIZ,MK_PROGR_2,DG_INDIRIZZO_EMAIL,FATT_MAIL) VALUES ('0100','00','00','00','CLIENT','"+codcli+"','CNTFOR','1','"+email+"','1')")
+			curs.execute("commit")
+			#app.showLabel("avviso1") #nascondo avviso1 di comodo per avvisi
+			#app.setLabel("avviso1","RECORD INSERITO")
+			#app.setLabelFg("avviso1", "green")#NOMELABEL, COLORE SFONDO
+			#privacy()
+
+############################################################################################################################
+###########################################FINE EVENTI BOTTONI##############################################################
+############################################################################################################################			
+			
 
 # create a GUI variable called app
 app = gui("Inserimento FATTUREONLINE - By FRANCO AVINO", "600x300")
