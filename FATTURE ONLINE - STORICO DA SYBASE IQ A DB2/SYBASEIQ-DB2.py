@@ -3,7 +3,7 @@ import pyodbc
 import jaydebeapi
 import jpype
 import time
-
+import os 
 
 
 #CONNESSIONE A SYBASE IQ
@@ -24,7 +24,24 @@ print ("INIZIO ESPORTAZIONE TABELLA DA DB2 PER BACKUP")
 oggi=time.strftime('%d-%m-%Y')#data di oggi
 curs.execute("SELECT * FROM DIGI.TABUTE_AZMAIL")
 rows=curs.fetchall()
-file = open("AZMAIL-BACKUP"+oggi+".txt","w") 
+
+backup="AZMAIL-BACKUP"+oggi+".txt"
+
+if os.path.isfile(backup):
+	print ("ESISTE")
+	controllo1 = input("Esiste già un backup con la data di oggi, sovrascrivo? SI-NO ")
+	if controllo1=="SI" or controllo1=="si" or controllo1=="Si":
+		controllo2 = input("Sei sicuro? SI-NO")
+		if controllo2=="SI" or controllo2=="si" or controllo2=="Si":
+			print ("PROVO A SOVRASCRIVERE IL FILE...\n")
+		else:
+			exit()
+	else:
+		exit()
+
+	
+
+file = open(backup,"w") 
 for row in rows:
 	controllocampo1=0
 	for field in row:
