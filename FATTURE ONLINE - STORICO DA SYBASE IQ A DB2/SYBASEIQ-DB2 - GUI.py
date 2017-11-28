@@ -21,6 +21,10 @@ conn=jaydebeapi.connect('com.ibm.db2.jcc.DB2Driver', 'jdbc:db2://10.1.12.69:5000
 curs=conn.cursor()
 #########FINE DB2
 
+def updateMeter(percentComplete):
+    app.setMeter("progress", percentComplete)
+
+
 #######BACKUP DATI SU DB2#################################################################
 def export_db2():
 	app.showLabel("tempo")
@@ -121,6 +125,8 @@ def export_iq():
 
 ########PROCEDURA SYBASE -> DB2
 def sydb2():
+	percentComplete=0
+	app.registerEvent(updateMeter(percentComplete))
 	app.showLabel("tempo")
 	app.setLabel("tempo","BACKUP DATI SU DB2") 
 	app.hideButton("Esegui")
@@ -132,6 +138,7 @@ def sydb2():
 	cursiq.execute("SELECT codice_cliente,e_mail FROM DBA.clienti_email") #SELEZIONO TUTTA LA TABELLA
 	rows=cursiq.fetchall()
 	daimportare=len(rows)
+	unpercent=int(daimportare/100) #calcolo 1% per statusbar
 	countmodificate=0
 	countnuove=0
 	for row in rows: #per ogni riga
@@ -147,6 +154,12 @@ def sydb2():
 			curs.execute("INSERT INTO DIGI.TABUTE_AZMAIL (DG_C_SOC,DG_C_DIVS,DG_C_VERS,MK_DIVISIONE,MK_TIPO_CONTROPART,MK_CONTROPARTE,MK_UNITA_ORGANIZ,MK_PROGR_2,DG_INDIRIZZO_EMAIL,MK_FATT_MAIL) VALUES ('0100','00','00','00','CLIENT','"+codcli+"','CNTFOR','1','"+email+"','1')")
 			curs.execute("commit")
 			countnuove=countnuove+1
+		
+		unpercent=unpercent-1#conto per %
+		if unpercent==0:
+			unpercent=int(daimportare/100)#########+1%!
+			percentComplete=percentComplete+1
+			app.registerEvent(updateMeter(percentComplete))
 	
 	end_time=time.time()
 	tempo=str(int(end_time-start_time))
@@ -188,5 +201,9 @@ app.setLabelFg("title", "red") #NOME LABEL, COLORE CARATTERE
 app.addLabel("tempo"," ") #NOMELABEL, CONTENUTO
 app.hideLabel("tempo") #nascondo avviso1 di comodo per avvisi
 
+app.addMeter("progress")
+app.setMeterFill("progress", "blue")
+
 app.addButtons(["Esegui","Dump DB2","Dump SYBASEIQ"], press)
+
 app.go()

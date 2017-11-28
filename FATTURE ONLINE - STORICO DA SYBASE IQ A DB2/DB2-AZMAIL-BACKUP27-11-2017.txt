@@ -5335,3 +5335,4 @@
 "","","","","0100","00","00","00","CLIENT","20064446    ","CNTFOR","1.0","invoice.box@cefla.it                                        ","1"
 "","","","","0100","00","00","00","CLIENT","20030924    ","CNTFOR","1.0","amministrazione@monitor-industriali.com                     ","1"
 "","","","","0100","00","00","00","CLIENT","20050779    ","CNTFOR","1.0","a.marzioni@casalicomputers.it                               ","1"
+"","","","","0100","00","00","00","CLIENT","20044876    ","CNTFOR","1.0","nbeneventi@tecnord.com                                      ","1"
