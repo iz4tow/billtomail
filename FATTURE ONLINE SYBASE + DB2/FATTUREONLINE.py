@@ -59,10 +59,11 @@ def privacy():
 	global fromaddr
 	oggi=time.strftime('%d-%m-%Y')#data di oggi
 	fine=oggi #SALVO DIVERSA IMPOSTAZIONE NELLA BANDIERA LA FINE E' OGGI
-	mails=email+","+contatto_interno
+	mails=email+";"+contatto_interno
 	privacy = MIMEMultipart()
 	privacy['From'] = fromaddr
-	privacy['To'] = mails
+	privacy['To'] = email
+	privacy['Cc'] = contatto_interno
 	privacy['Subject'] = "INVIO FATTURE TELEMATICO MELCHIONI SPA"
 
 	corpo = "Milano, "+oggi+"<br><br>Gentile Cliente,"
@@ -81,7 +82,7 @@ def privacy():
 	server.starttls()
 	server.login(user, password)
 	privacyor = privacy.as_string()
-	server.sendmail(fromaddr, mails, privacyor)
+	server.sendmail(fromaddr,[email,contatto_interno], privacyor)
 	server.quit()
 
 ############################################################################################################################
