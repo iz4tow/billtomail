@@ -82,7 +82,7 @@ def export_iq():
 	app.hideButton("Dump SYBASEIQ")
 	oggi=time.strftime('%d-%m-%Y')#data di oggi
 	
-	backup="SYBASEIQ-AZMAIL-BACKUP"+oggi+".txt"
+	backup="SYBASEIQ-CLIENTIMAIL-BACKUP"+oggi+".txt"
 	
 	if os.path.isfile(backup):
 		controllo1 =app.yesNoBox("CONFERMA", "Esiste già un backup con la data di oggi, sovrascrivo?", parent=None)
@@ -97,8 +97,8 @@ def export_iq():
 	
 		
 	iniz_bck_time=time.time()
-	curs.execute("SELECT * FROM DIGI.TABUTE_AZMAIL")
-	rows=curs.fetchall()
+	cursiq.execute("SELECT * FROM DBA.clienti_email")
+	rows=cursiq.fetchall()
 	file = open(backup,"w") 
 	for row in rows:
 		controllocampo1=0

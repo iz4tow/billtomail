@@ -1,0 +1,24 @@
+missing module named resource - imported by posix, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py
+missing module named posix - imported by os, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py
+missing module named _posixsubprocess - imported by subprocess, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py
+missing module named org - imported by pickle, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py
+missing module named readline - imported by cmd, code, pdb, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py
+excluded module named _frozen_importlib - imported by importlib, importlib.abc, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py
+missing module named _frozen_importlib_external - imported by importlib._bootstrap, importlib, importlib.abc, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py
+missing module named _winreg - imported by platform, jpype._windows, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py
+missing module named _scproxy - imported by urllib.request
+missing module named java - imported by platform, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py
+missing module named 'java.lang' - imported by platform, jaydebeapi, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py, xml.sax._exceptions
+missing module named vms_lib - imported by platform, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py
+missing module named termios - imported by tty, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py, getpass
+missing module named grp - imported by shutil, tarfile, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py
+missing module named pwd - imported by posixpath, shutil, tarfile, http.server, webbrowser, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py, netrc, getpass
+missing module named _dummy_threading - imported by dummy_threading, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py
+missing module named 'org.python' - imported by copy, C:\Users\f.avino\Desktop\PYTHON\billtomail\FATTURE ONLINE - STORICO DA SYBASE IQ A DB2\SYBASEIQ-DB2.py, xml.sax
+missing module named PyObjCTools - imported by jpype._gui
+missing module named jpype.isJVMStarted - imported by jpype, jpype._jpackage
+missing module named 'java.io' - imported by jaydebeapi
+missing module named 'java.net' - imported by jaydebeapi
+missing module named 'java.util' - imported by jaydebeapi
+missing module named jarray - imported by jaydebeapi
+missing module named 'java.sql' - imported by jaydebeapi
