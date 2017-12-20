@@ -26,30 +26,35 @@ for riga in file:
 		if impostazione=='contatto_interno':
 			contatto_interno=valore
 			contatto_interno=contatto_interno.replace("\n","")
+			contatto_interno=contatto_interno.replace(",","\n")
+			contatto_interno=contatto_interno.replace(";","\n")
 ##############################################FINE FILE INI IMPOSAZIONI###################################################################
 
-msg = MIMEMultipart()
-msg['From'] = fromaddr
-msg['To'] = contatto_interno
-msg['Subject'] = "INVIO FATTURE TELEMATICO MELCHIONI S.P.A."
-
-body = "In allegato il log del billtomail"
-
-msg.attach(MIMEText(body, 'plain'))
-
-filename = "log.txt"
-
-attachment = open(filename, "rb")
+for mail in contatto_interno.splitlines():
+	mail=mail.replace("\n","")
+	print ("INVIO MAIL A "+mail)
+	msg = MIMEMultipart()
+	msg['From'] = fromaddr
+	msg['To'] = mail
+	msg['Subject'] = "INVIO FATTURE TELEMATICO MELCHIONI S.P.A."
 	
-
-part = MIMEBase('application', 'octet-stream')
-part.set_payload((attachment).read()) #CARICA l'ALLEGATO
-encoders.encode_base64(part)
-part.add_header('Content-Disposition', "attachment; filename= %s" % filename)	#preparo l'allegato nell'header, la variabile documento è il nome
-msg.attach(part)#allego il file		
-server = smtplib.SMTP('owa.melchioni.it', 25)
-server.starttls()
-server.login(user, password)
-text = msg.as_string()
-server.sendmail(fromaddr, contatto_interno, text)
-server.quit()
+	body = "In allegato il log del billtomail"
+	
+	msg.attach(MIMEText(body, 'plain'))
+	
+	filename = "log.txt"
+	
+	attachment = open(filename, "rb")
+		
+	
+	part = MIMEBase('application', 'octet-stream')
+	part.set_payload((attachment).read()) #CARICA l'ALLEGATO
+	encoders.encode_base64(part)
+	part.add_header('Content-Disposition', "attachment; filename= %s" % filename)	#preparo l'allegato nell'header, la variabile documento è il nome
+	msg.attach(part)#allego il file		
+	server = smtplib.SMTP('owa.melchioni.it', 25)
+	server.starttls()
+	server.login(user, password)
+	text = msg.as_string()
+	server.sendmail(fromaddr, mail, text)
+	server.quit()

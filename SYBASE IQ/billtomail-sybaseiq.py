@@ -80,17 +80,17 @@ cursm.execute("UPDATE bandiera SET esecuzione='1' WHERE id='"+idbandiera+"'")
 
 
 inizio=inizio_bandiera#LA DATA DI INIZIO è COMUNQUE DETTATA DALLA BANDIERA, FORZATA O MENO
-if forzata!=0:
+if forzata!=0 and fine_bandiera!='0':
 	fine=fine_bandiera
 	print ("!!!!!!!!!!!!!!!!!!!!!!!!!DATA FORZATA DA UTENTE!!!!!!!!!!!!!!!!!!!!!!!!!\n")
 	
 
-if esecuzione!=0:
+if esecuzione!=0 and fine_bandiera!='0':
 	print ("!!!!!!!!!!!!!!!!!!!!!!!!!REINIZIO DA DOVE MI ERO INTERROTTO SALTANDO L'IMPORTAZIONE!!!!!!!!!!!!!!!!!!!!!!!!!")
 	print ("!!!!!!!!!!!!!!!!!!!!!!!!!DATA FORZATA DA ERRORE PRECEDENTE ESECUZIONE!!!!!!!!!!!!!!!!!!!!!!!!!\n")
 	fine=fine_bandiera
 	
-if errore!=0:
+if errore!=0 and fine_bandiera!='0':
 	print ("!!!!!!!!!!!!!!!!!!!!!!!!!NON TUTTE LE FATTURE DELLA FATTURAZIONE PRECEDENTE SONO STATE INVIATE!!!!!!!!!!!!!!!!!!!!!!!!!")
 	print ("!!!!!!!!!!!!!!!!!!!!!!!!!DATA FORZATA DA ERRORE PRECEDENTE ESECUZIONE!!!!!!!!!!!!!!!!!!!!!!!!!\n")
 	fine=fine_bandiera
