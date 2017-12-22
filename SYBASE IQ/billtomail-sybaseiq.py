@@ -206,3 +206,4 @@ else:
 	error = err.as_string()
 	server.sendmail(fromaddr, contatto_interno, error)
 	server.quit()
+	file = open("ERRORE.err", "w") 

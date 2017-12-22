@@ -7,12 +7,14 @@ net use S: \\192.168.168.102\d$ /USER:administrator 12mwwbb
 
 rem CONTROLLO FILE PILOTA
 dir S:\PDFATTURE\Bill2Mail\pilota*.txt >> log.txt
+if exist ERRORE.err  goto inizio
 if not exist S:\PDFATTURE\Bill2Mail\pilota_mail.txt goto uscita
 if not exist S:\PDFATTURE\Bill2Mail\pilota_artfatt3.txt goto uscita
 if not exist S:\PDFATTURE\Bill2Mail\pilota_spool.txt goto uscita
 
 
-
+:inizio
+echo Y | del ERRORE.err  
 echo "INIZIO BILLTOMAIL" > ESECUZIONE.txt
 echo Y | del S:\PDFATTURE\Bill2Mail\pilota_mail.txt
 echo Y | del S:\PDFATTURE\Bill2Mail\pilota_artfatt3.txt
@@ -22,7 +24,7 @@ time /T >> ESECUZIONE.txt
 
 
 billtomail.exe >> log.txt
-rem log.exe
+log.exe
 
 echo Y | del ESECUZIONE.txt
 
