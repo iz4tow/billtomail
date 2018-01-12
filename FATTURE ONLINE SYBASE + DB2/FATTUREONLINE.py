@@ -57,6 +57,7 @@ def privacy():
 	global user
 	global password
 	global fromaddr
+	global codcli
 	oggi=time.strftime('%d-%m-%Y')#data di oggi
 	fine=oggi #SALVO DIVERSA IMPOSTAZIONE NELLA BANDIERA LA FINE E' OGGI
 	mails=email+";"+contatto_interno
@@ -64,7 +65,7 @@ def privacy():
 	privacy['From'] = fromaddr
 	privacy['To'] = email
 	privacy['Cc'] = contatto_interno
-	privacy['Subject'] = "INVIO FATTURE TELEMATICO MELCHIONI SPA"
+	privacy['Subject'] = "INVIO FATTURE TELEMATICO MELCHIONI SPA - CLIENTE: "+codcli
 
 	corpo = "Milano, "+oggi+"<br><br>Gentile Cliente,"
 	corpo = corpo +"<br>come da Lei richiesto, Le comunichiamo che il servizio di fatturazione cartaceo verrà sostituito dalla versione elettronica."
@@ -99,6 +100,7 @@ def press(button):
 ###############################################################TASTO INSERISCI
 	if button == "Inserisci":
 		global email
+		global codcli
 		codcli=app.getEntry("codicecliente")
 		
 		########################SYBASE IQ
